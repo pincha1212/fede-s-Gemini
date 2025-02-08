@@ -10,8 +10,8 @@ const clearChatButton = document.getElementById("deleteButton");
 let currentUserMessage = null;
 let isGeneratingResponse = false;
 
-const GOOGLE_API_KEY = "AIzaSyAJWnphgU0iHl9bBGwAFQ8vJbCgp24R_XQ";
-const API_REQUEST_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GOOGLE_API_KEY}`;
+const API_REQUEST_URL = `http://localhost:3001/api/gemini`;
+
 
 // Load saved data from local storage
 const loadSavedChatHistory = () => {
@@ -271,6 +271,32 @@ messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
     handleOutgoingMessage();
 });
+
+
+
+// Por ejemplo, en script.js
+fetch(API_REQUEST_URL, {
+
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    // Aquí se envía la estructura esperada por la API de Gemini
+    body: JSON.stringify({
+        contents: [
+            {
+                parts: [
+                    { text: "¿Cuál es la capital de Francia?" }
+                ]
+            }
+        ]
+    })
+})
+.then(response => response.json())
+.then(data => console.log("Respuesta de Gemini:", data))
+.catch(error => console.error("Error en la petición:", error));
+
+
 
 // Load saved chat history on page load
 loadSavedChatHistory();
